@@ -1,25 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {useState} from "react";
+
+import "./App.css";
+import {socket} from "./socket";
+
+socket.on("ROOM:GET_ROOMS", (rooms) => {
+  console.log("rooms", rooms);
+});
 
 function App() {
+  const [name, setName] = useState("");
+  const [room, setRoom] = useState("");
+
+  const hendleConnect = () => {
+    socket.emit("ROOM:JOIN", {
+      name,
+      room,
+    });
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      name
+      <input
+        value={name}
+        onChange={(event) => setName(event.target.value)}
+        className="bg-slate-400 border-stone-700 border-2 outline-none h-9 placeholder: text-white"
+        placeholder="Имя"
+      />
+      room
+      <input
+        value={room}
+        onChange={(event) => setRoom(event.target.value)}
+        className="bg-slate-400 border-stone-700 border-2 outline-none h-9 placeholder: text-white"
+        placeholder="Имя"
+      />
+      <button onClick={hendleConnect}>Send</button>
+    </>
   );
 }
 
